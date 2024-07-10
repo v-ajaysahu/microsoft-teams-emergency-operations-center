@@ -2955,7 +2955,7 @@ class IncidentDetails extends React.PureComponent<IIncidentDetailsProps, IIncide
             }
             else {
                 // logic to identify uniqe users 
-                
+
                 userIds.forEach((user: any) => {
                     if (uniqueUserArray.indexOf(user.userId) === -1) {
                         uniqueUserArray.push(user.userId);
@@ -4241,6 +4241,14 @@ class IncidentDetails extends React.PureComponent<IIncidentDetailsProps, IIncide
                                                             ariaLabel={this.props.localeStrings.fieldIncidentStatus + constants.requiredAriaLabel}
                                                             id="incident-status-listbox"
                                                             onMenuOpen={this.onStatusMenuOpen}
+                                                            styles={{
+                                                                optionsContainer: {
+                                                                    "button span": {
+                                                                        maxHeight: "35px",
+                                                                        height: "auto"
+                                                                    }
+                                                                }
+                                                            }}
                                                         />
                                                         {this.state.inputValidation.incidentStatusHasError && (
                                                             <label aria-live="polite" role="alert" className="message-label">{this.props.localeStrings.statusRequired}</label>
@@ -4275,6 +4283,14 @@ class IncidentDetails extends React.PureComponent<IIncidentDetailsProps, IIncide
                                                                 ariaLabel={this.props.localeStrings.fieldIncidentType + constants.requiredAriaLabel}
                                                                 id="incident-type-listbox"
                                                                 onMenuOpen={this.onMenuOpen}
+                                                                styles={{
+                                                                    optionsContainer: {
+                                                                        "button span": {
+                                                                            maxHeight: "35px",
+                                                                            height: "auto"
+                                                                        }
+                                                                    }
+                                                                }}
                                                             />
                                                         }
                                                         {this.state.inputValidation.incidentTypeHasError && (
@@ -4350,6 +4366,13 @@ class IncidentDetails extends React.PureComponent<IIncidentDetailsProps, IIncide
                                                                         calloutProps={{ directionalHintFixed: true, doNotLayer: true }}
                                                                         ariaLabel={constants.startTimeAriaLabel + constants.requiredAriaLabel}
                                                                         className="incident-timepicker"
+                                                                        styles={{
+                                                                            optionsContainer: {
+                                                                                "button span": {
+                                                                                    height: "auto"
+                                                                                }
+                                                                            }
+                                                                        }}
                                                                     />
                                                                 </div>
                                                                 {this.state.inputValidation.incidentStartDateTimeHasError && (
@@ -4565,7 +4588,7 @@ class IncidentDetails extends React.PureComponent<IIncidentDetailsProps, IIncide
                                                         <Fluent9CheckBox
                                                             label={this.props.localeStrings.roleCheckboxTooltip}
                                                             aria-label={this.props.localeStrings.roleCheckboxTooltip}
-                                                            onChange={(_, data) => this.setState({ saveDefaultRoleCheck: data.checked})}
+                                                            onChange={(_, data) => this.setState({ saveDefaultRoleCheck: data.checked })}
                                                             className="role-checkbox"
                                                             checked={this.state.saveDefaultRoleCheck}
                                                         />
@@ -4685,7 +4708,7 @@ class IncidentDetails extends React.PureComponent<IIncidentDetailsProps, IIncide
                                                                 <Col as="td" md={3} sm={3} xs={3}>{item.userNamesString}</Col>
                                                                 <Col as="td" md={3} sm={3} xs={3}>{item.leadNameString}</Col>
                                                                 <Col as="td" md={1} sm={1} xs={1} className="col-center role-body-checkbox">
-                                                                     <Fluent9CheckBox
+                                                                    <Fluent9CheckBox
                                                                         title={this.props.localeStrings.incidentTypeDefaultRoleCheckboxLabel}
                                                                         aria-label={this.props.localeStrings.roleCheckboxTooltip}
                                                                         onChange={(ev, isChecked) => this.onChecked(ev, Boolean(isChecked.checked), index)}
@@ -4727,12 +4750,12 @@ class IncidentDetails extends React.PureComponent<IIncidentDetailsProps, IIncide
                                             {this.state.roleAssignments.length > 0 ?
                                                 <div className="role-assignment-table">
                                                     <Fluent9CheckBox
-                                                            label={this.props.localeStrings.incidentTypeDefaultRoleCheckboxLabel}
-                                                            aria-label={this.props.localeStrings.incidentTypeDefaultRoleCheckboxLabel}
-                                                            onChange={(_ev, isChecked) => this.setState({ saveIncidentTypeDefaultRoleCheck: isChecked.checked })}
-                                                            className="assets-save-default-checkbox"
-                                                            checked={this.state.saveIncidentTypeDefaultRoleCheck}
-                                                        />
+                                                        label={this.props.localeStrings.incidentTypeDefaultRoleCheckboxLabel}
+                                                        aria-label={this.props.localeStrings.incidentTypeDefaultRoleCheckboxLabel}
+                                                        onChange={(_ev, isChecked) => this.setState({ saveIncidentTypeDefaultRoleCheck: isChecked.checked })}
+                                                        className="assets-save-default-checkbox"
+                                                        checked={this.state.saveIncidentTypeDefaultRoleCheck}
+                                                    />
                                                 </div>
                                                 : null}
                                         </Col>

@@ -81,6 +81,7 @@ interface IEOCHomeState {
     bingMapsKeyConfigData: any;
     appTitle: string;
     appTitleData: any;
+    appLogoURL: string;
 }
 
 interface IEOCHomeProps {
@@ -152,6 +153,7 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
             bingMapsKeyConfigData: {},
             appTitle: siteConfig.appTitle,
             appTitleData: {},
+            appLogoURL: require("../assets/Images/AppLogo.svg").default
         }
 
         this.showActiveBridge = this.showActiveBridge.bind(this);
@@ -235,11 +237,14 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
 
                 //method to get settings from config list
                 await this.getConfigSettings();
+
+                //method to logo image URL from AppLogo list
+                await (this.getAppLogoURL());
             }
         }
     }
     //create MS Graph client
-    createMicrosoftGraphClient(credential: TeamsUserCredential,scopes: string[]) {
+    createMicrosoftGraphClient(credential: TeamsUserCredential, scopes: string[]) {
         const authProvider = new TeamsFxProvider(credential, scopes);
         const graphClient = Client.initWithMiddleware({
             authProvider: authProvider,
@@ -447,6 +452,39 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
             this.setState({
                 settingsLoader: false
             });
+            // Log Exception
+            this.dataService.trackException(appInsights, error,
+                constants.componentNames.EOCHomeComponent,
+                `${constants.componentNames.EOCHomeComponent}_getConfigSetting`, this.state.userPrincipalName);
+        }
+    }
+
+    //Apps logo is retreived from the TEOC-AooLogo library. If no logo or library is found the default logo is displayed 
+    private getAppLogoURL = async () => {
+        try {
+            //graph endpoint to get data from TEOC-AppLogo list
+            let graphEndpoint = `${graphConfig.spSiteGraphEndpoint}${this.state.siteId}/lists/${siteConfig.appLogoList}/items?$expand=fields&$Top=5000`;
+            let appLogoData;
+            try {
+                appLogoData = await this.dataService.getGraphData(graphEndpoint, this.state.graph);
+            }
+            catch {
+                console.log("TEOC-AppLogo library not found.");
+            }
+
+            if (appLogoData != undefined) {
+                const appLogoFiltered = appLogoData.value.filter((item: any) => item.fields.LinkFilename === siteConfig.appLogoTitle);
+                if (appLogoFiltered.length > 0)
+                    this.setState({
+                        appLogoURL: appLogoFiltered[0].webUrl
+                    });
+            }
+        }
+        catch (error: any) {
+            console.error(
+                constants.errorLogPrefix + `${constants.componentNames.EOCHomeComponent}_getConfigSetting \n`,
+                JSON.stringify(error)
+            );
             // Log Exception
             this.dataService.trackException(appInsights, error,
                 constants.componentNames.EOCHomeComponent,
@@ -736,6 +774,7 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
                             currentUserName={this.state.currentUserName}
                             currentThemeName={this.state.currentThemeName}
                             appTitle={this.state.appTitle}
+                            appLogoURL={this.state.appLogoURL}
                         />
 
                         {this.state.showLoginPage &&
@@ -835,6 +874,7 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
                                                             graphContextURL={this.state.graphContextURL}
                                                             tenantID={this.state.tenantID}
                                                             fromActiveDashboardTab={this.state.fromActiveDashboardTab}
+                                                            currentThemeName={this.state.currentThemeName}
                                                         />
                                                         :
                                                         <Dialog

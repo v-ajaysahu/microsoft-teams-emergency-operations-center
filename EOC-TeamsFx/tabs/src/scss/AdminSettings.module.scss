@@ -13,7 +13,7 @@
 
 div[class~="admin-settings"] {
     background-color: rgb(238, 238, 238);
-
+    
     div[class~="admin-settings-path"] {
         width: 100%;
         height: auto;
@@ -86,11 +86,8 @@ div[class~="admin-settings"] {
                 position: relative;
                 top: 1px;
                 padding: 0px 3px 7px;
+                margin-right: 30px;
                 @include fontstyles(600, #636363, 16px, 24px, left);
-
-                &:nth-child(1) {
-                    margin-right: 30px;
-                }
 
                 &:hover {
                     border-bottom: 3px solid #8c8d9a;
@@ -154,6 +151,12 @@ div[class~="admin-settings"] {
 
                             i {
                                 color: #000000;
+                            }
+                        }
+                        div[class~="label-font"] {
+                            font-size: 16px !important;
+                            label {
+                                 @include fontstyles(normal, #000000, 16px, 22px, left)
                             }
                         }
                     }
@@ -531,6 +534,12 @@ div[class~="admin-settings-darkcontrast"] {
                         span[class~="info-icon"] {
                             i {
                                 color: var(--colorNeutralForeground1);
+                            }
+                        }
+                        div[class~="label-font"] {
+                            font-size: 16px !important;
+                            label {
+                                 color: var(--colorNeutralForeground1);
                             }
                         }
                     }

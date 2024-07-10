@@ -262,7 +262,9 @@ const localizedStrings = {
                 mapViewer: "Map Viewer",
                 formatIncidentsDataFailedErrMsg: "while formatting incident data. Please try again.",
                 m365GroupCreationFailedMessage: "You do not have permission to create M365 groups which is required to create an incident. Please check with your tenant administrator.",
-                removedRoleSuccessMessage: "Role deleted successfully!"
+                removedRoleSuccessMessage: "Role deleted successfully!",
+                modifyAppLogoLabel: "Modify App Logo",
+                uploadAppLogoButton: "Upload App Logo",
         },
         "ar-sa": {
                 AppTitleErrorLabel: "عنوان التطبيق مطلوب.",

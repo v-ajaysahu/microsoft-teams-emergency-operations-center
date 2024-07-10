@@ -8,6 +8,7 @@ import * as constants from "../common/Constants";
 import "../scss/AdminSettings.module.scss";
 import ConfigSettings from "./ConfigSettings";
 import { TeamNameConfig } from "./TeamNameConfig";
+import ModifyAppLogo from "./ModifyAppLogo";
 
 export interface IAdminSettingsProps {
     localeStrings: any;
@@ -36,6 +37,7 @@ export interface IAdminSettingsProps {
 export interface IAdminSettingsState {
     teamNameConfigSettings: boolean;
     roleSettings: boolean;
+    modifyAppLogoSettings: boolean;
 }
 
 export default class AdminSettings extends React.Component<IAdminSettingsProps, IAdminSettingsState> {
@@ -45,7 +47,8 @@ export default class AdminSettings extends React.Component<IAdminSettingsProps, 
         //States
         this.state = {
             teamNameConfigSettings: true,
-            roleSettings: false
+            roleSettings: false,
+            modifyAppLogoSettings: false
         }
 
     }
@@ -78,7 +81,7 @@ export default class AdminSettings extends React.Component<IAdminSettingsProps, 
                                 <div className="toggle-setting-type">
                                     <div
                                         className={`setting-type${this.state.teamNameConfigSettings ? " selected-setting" : ""}`}
-                                        onClick={() => this.setState({ teamNameConfigSettings: true, roleSettings: false })}
+                                        onClick={() => this.setState({ teamNameConfigSettings: true, roleSettings: false, modifyAppLogoSettings:false })}
                                         title={this.props.localeStrings.formTitleTeamNameConfig}
                                         tabIndex={0}
                                         aria-selected={this.state.teamNameConfigSettings}
@@ -88,13 +91,23 @@ export default class AdminSettings extends React.Component<IAdminSettingsProps, 
                                     </div>
                                     <div
                                         className={`setting-type${this.state.roleSettings ? " selected-setting" : ""}`}
-                                        onClick={() => this.setState({ teamNameConfigSettings: false, roleSettings: true })}
+                                        onClick={() => this.setState({ teamNameConfigSettings: false, roleSettings: true, modifyAppLogoSettings:false })}
                                         title={this.props.localeStrings.configSettingsLabel}
                                         tabIndex={0}
                                         aria-selected={this.state.roleSettings}
                                         onKeyDown={(evt: any) => { if (evt.key === constants.enterKey) this.setState({ teamNameConfigSettings: false, roleSettings: true }) }}
                                     >
                                         {this.props.localeStrings.configSettingsLabel}
+                                    </div>
+                                    <div
+                                        className={`setting-type${this.state.modifyAppLogoSettings ? " selected-setting" : ""}`}
+                                        onClick={() => this.setState({ teamNameConfigSettings: false, roleSettings: false, modifyAppLogoSettings: true })}
+                                        title={this.props.localeStrings.modifyAppLogoLabel}
+                                        tabIndex={0}
+                                        aria-selected={this.state.roleSettings}
+                                        onKeyDown={(evt: any) => { if (evt.key === constants.enterKey) this.setState({ teamNameConfigSettings: false, roleSettings: false, modifyAppLogoSettings: true }) }}
+                                    >
+                                        {this.props.localeStrings.modifyAppLogoLabel}
                                     </div>
                                 </div>
                             </Col>
@@ -132,6 +145,14 @@ export default class AdminSettings extends React.Component<IAdminSettingsProps, 
                                 userPrincipalName={this.props.userPrincipalName}
                                 isMapViewerEnabled={this.props.isMapViewerEnabled}
                                 bingMapsKeyConfigData={this.props.bingMapsKeyConfigData}
+                            />
+                        }
+                        {this.state.modifyAppLogoSettings &&
+                            <ModifyAppLogo
+                                localeStrings={this.props.localeStrings}
+                                onBackClick={this.props.onBackClick}
+                                tenantName={this.props.tenantName}
+                                siteName={this.props.siteName}
                             />
                         }
                     </div>
