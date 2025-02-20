@@ -319,6 +319,7 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
         try {
             await this.credential.getToken(this.scope);
         } catch (error) {
+            alert("Token is not valid. Please login again to get the token." + error);
             this.setState({
                 showLoginPage: true
             });
@@ -334,7 +335,7 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
     public loginClick = async () => {
         try {
             const { scope } = {
-                scope: graphConfig.scope
+                scope: graphConfig?.scope
             };
 
             const credential = this.credential;
@@ -345,8 +346,8 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
             }
             const graph = this.createMicrosoftGraphClient(credential, scope); // create graph object
             console.log(constants.infoLogPrefix + "graph ", graph);
-            alert("Graph Object " + graph);
-            alert("graphConfig.meGraphEndpoint " + graphConfig.meGraphEndpoint);
+            alert("Graph Object " + JSON.stringify(graph));
+            alert("graphConfig.meGraphEndpoint " + graphConfig?.meGraphEndpoint);
 
             const profile = await this.dataService.getGraphData(graphConfig.meGraphEndpoint, graph); // get user profile to validate the API
 
@@ -365,7 +366,7 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
             }
         } catch (error: any) {
             this.dataService.trackException(appInsights, error, constants.componentNames.EOCHomeComponent, 'loginClick', this.state.userPrincipalName);
-            this.dataService.trackTrace(appInsights, error.message,"", this.state.userPrincipalName);
+            this.dataService.trackTrace(appInsights, error.message, "", this.state.userPrincipalName);
             alert("Login failed: " + error);
         }
     }
