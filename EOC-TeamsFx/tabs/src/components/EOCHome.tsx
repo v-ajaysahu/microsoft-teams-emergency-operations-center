@@ -153,9 +153,9 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
             isMapViewerEnabled: false,
             azureMapsKeyConfigData: {},
             appTitle: siteConfig.appTitle,
-            appTitleData: {},         
+            appTitleData: {},
             editIncidentAccessRole: "",
-            editIncidentAccessRoleData: {}   
+            editIncidentAccessRoleData: {}
         }
 
         this.showActiveBridge = this.showActiveBridge.bind(this);
@@ -332,29 +332,35 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
 
     // this function gets called on Authorized button click
     public loginClick = async () => {
-        const { scope } = {
-            scope: graphConfig.scope
-        };
+        try {
+            const { scope } = {
+                scope: graphConfig.scope
+            };
 
-        const credential = this.credential;
-        await credential.login(scope);
-        const graph = this.createMicrosoftGraphClient(credential, scope); // create graph object
-        console.log(constants.infoLogPrefix + "graph ", graph);
+            const credential = this.credential;
+            await credential.login(scope);
+            const graph = this.createMicrosoftGraphClient(credential, scope); // create graph object
+            console.log(constants.infoLogPrefix + "graph ", graph);
 
-        const profile = await this.dataService.getGraphData(graphConfig.meGraphEndpoint, graph); // get user profile to validate the API
+            const profile = await this.dataService.getGraphData(graphConfig.meGraphEndpoint, graph); // get user profile to validate the API
 
-        // validate if the above API call is returning result
-        if (!!profile) {
-            this.setState({ showLoginPage: false, graph: graph })
+            // validate if the above API call is returning result
+            if (!!profile) {
+                this.setState({ showLoginPage: false, graph: graph })
 
-            // call method to get the tenant details
-            if (!this.state.showLoginPage) {
-                await this.getTenantAndSiteDetails();
-                await this.getCurrentUserDetails();
+                // call method to get the tenant details
+                if (!this.state.showLoginPage) {
+                    await this.getTenantAndSiteDetails();
+                    await this.getCurrentUserDetails();
+                }
             }
-        }
-        else {
-            this.setState({ showLoginPage: true })
+            else {
+                this.setState({ showLoginPage: true })
+            }
+        } catch (error: any) {
+            this.dataService.trackException(appInsights, error, constants.componentNames.EOCHomeComponent, 'loginClick', this.state.userPrincipalName);
+            this.dataService.trackTrace(appInsights, error.message,"", this.state.userPrincipalName);
+            document.write(error.message);
         }
     }
 
@@ -420,13 +426,13 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
 
             //graph endpoint to get data from TEOC-Config list
             let graphEndpoint = `${graphConfig.spSiteGraphEndpoint}${this.state.siteId}/lists/${siteConfig.configurationList}/items?$expand=fields&$Top=5000`;
-            const configDataRecords = [constants.enableRoles, constants.azureMapsKey, constants.appTitleKey,  constants.editIncidentAccessRoleKey];
+            const configDataRecords = [constants.enableRoles, constants.azureMapsKey, constants.appTitleKey, constants.editIncidentAccessRoleKey];
             const configData = await this.dataService.getConfigData(graphEndpoint, this.state.graph, configDataRecords);
             await this.checkUserRoleIsAdmin();
             const appTitleItem = configData.filter((item: any) => item.title === constants.appTitleKey);
             const azureMapItem = configData.filter((item: any) => item.title === constants.azureMapsKey);
             const editIncidentAccessRole = configData.filter((item: any) => item.title === constants.editIncidentAccessRoleKey);
-            
+
             if (appTitleItem.length > 0) {
                 this.setState({
                     appTitle: appTitleItem[0].value,
@@ -748,7 +754,7 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
                             localeStrings={localeStrings}
                             currentUserName={this.state.currentUserName}
                             currentThemeName={this.state.currentThemeName}
-                            appTitle={this.state.appTitle}                           
+                            appTitle={this.state.appTitle}
                         />
 
                         {this.state.showLoginPage &&
