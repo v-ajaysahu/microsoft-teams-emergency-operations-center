@@ -360,7 +360,7 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
         } catch (error: any) {
             this.dataService.trackException(appInsights, error, constants.componentNames.EOCHomeComponent, 'loginClick', this.state.userPrincipalName);
             this.dataService.trackTrace(appInsights, error.message,"", this.state.userPrincipalName);
-            document.write(error.message);
+            alert("Login failed: " + error);
         }
     }
 
