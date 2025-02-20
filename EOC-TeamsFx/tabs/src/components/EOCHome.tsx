@@ -338,7 +338,11 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
             };
 
             const credential = this.credential;
-            await credential.login(scope);
+            try {
+                await credential.login(scope);
+            } catch (error) {
+                alert("Credential Login failed: " + error);
+            }
             const graph = this.createMicrosoftGraphClient(credential, scope); // create graph object
             console.log(constants.infoLogPrefix + "graph ", graph);
 
