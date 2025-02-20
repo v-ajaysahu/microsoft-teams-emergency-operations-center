@@ -345,6 +345,8 @@ export default class EOCHome extends React.Component<IEOCHomeProps, IEOCHomeStat
             }
             const graph = this.createMicrosoftGraphClient(credential, scope); // create graph object
             console.log(constants.infoLogPrefix + "graph ", graph);
+            alert("Graph Object " + graph);
+            alert("graphConfig.meGraphEndpoint " + graphConfig.meGraphEndpoint);
 
             const profile = await this.dataService.getGraphData(graphConfig.meGraphEndpoint, graph); // get user profile to validate the API
 
